@@ -4,12 +4,49 @@
 #include <cassert>
 #include <cstdlib>
 #include <vector>
-
+//test용
 using namespace std;
 
 vector<string> first_semester = { "디지털논리","이산구조","고급프로그래밍","리눅스활용실습","공학수학1" };//1학기 공통과목
 vector<string> second_semester = { "객체지향프로그래밍","선형대수학","자료구조","시스템소프트웨어","자료구조실습","오픈소스소프트웨어개발" };//2학기 공통과목
 vector<string> commons;//이번 학기 공통과목 저장하는 문자열 벡터
+
+//과목 클래스
+class Sub {
+private:
+	string class_name;
+	string professor;
+	int students;
+	double att;
+	double mid;
+	double fin;
+	double quiz;
+	int score_mid;
+	int score_fin;
+	int score_quiz;
+public:
+	void ask_subject_info();
+	string getClassName() { return this->class_name; }
+	//char getGrade();
+};
+void Sub::ask_subject_info() {
+
+	cout << "과목명: ";
+	cin >> class_name;
+	cout << "담당교수 : ";
+	cin >> professor;
+	cout << "점수(중간, 기말, 과제 순): ";
+	cin >> score_mid >> score_fin >> score_quiz;
+	cout << "해당과목 수강인원: ";
+	cin >> students;
+	cout << "성적 반영 비율을 입력하세요(출석, 과제, 중간, 기말 비율 순): ";
+	cin >> att >> mid >> fin >> quiz;
+}
+/*char Sub::getGrade() {
+
+}*/
+
+
 
 void show_subject(int semester) {
 	cout << endl;
@@ -56,8 +93,12 @@ restart:
 	{
 		string choose;
 		int cnt = 0;
-		cout << "공통과목 중 수강할 과목 선택 : ";
+		cout << "공통과목 중 수강할 과목 선택 : " << endl;
+		cout << "과목 입력을 종료하려면 stop_sub를 입력하시오" << endl;
 		cin >> choose;
+		if (choose == "stop_sub") {
+			break;
+		}
 		for (string a : commons)
 		{
 			if (a == choose) {
@@ -108,4 +149,45 @@ restart:
 		cout << "현재 신청한 학점 : " << current_grades << endl;
 		cout << endl;
 	}
+
+
+
+
+	vector<Sub> sub_vec;
+	vector<Sub>::iterator iter;
+
+	for (int i = 0; i < select.size(); i++) {
+		Sub s;
+		cout << " 성적 산출을 위한 정보를 입력해주세요" << endl;
+		s.ask_subject_info();
+		cout << endl;
+		sub_vec.push_back(s);
+
+	}
+
+	cout << "성적입력이 완료되었습니다. 원하시는 기능을 선택해 주세요" << endl;
+	cout << "1. 해당과목 학점 계산" << endl;
+	cout << "2. 전체 학점 계산" << endl;
+	cout << "3. 프로그램 종료" << endl;
+	int usrc;
+	cin >> usrc;
+	string usrchoice;
+	switch (usrc)
+	{
+	case 1:
+		cout << "무슨 과목의 학점을 계산하길 원하시나요?: ";
+		cin >> usrchoice;
+		for (iter = sub_vec.begin(); iter != sub_vec.end(); iter++) {
+			if (iter->getClassName() == usrchoice) {
+				cout << "해당과목의 예상 학점은 " << "A" << "입니다" << endl;
+			}
+		}
+		break;
+	case 3:
+		break;
+	default:
+		break;
+	}
+	return 0;
+
 }
