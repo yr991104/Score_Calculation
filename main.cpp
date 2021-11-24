@@ -41,6 +41,7 @@ public:
 	string getProfessor() { return this->professor; }
 	int getStudent() { return this->students; }
 	int getAtt() { return this->att; }
+	int getMid() { return this->mid; }
 	int getFin() { return this->fin; }
 	int getWork() { return this->work; }
 	int getQuiz() { return this->quiz; }
@@ -55,11 +56,11 @@ public:
 	double getScoreWork() { return this->score_work; }
 	double getScoreQuiz() { return this->score_quiz; }
 
-	void setScoreAtt(double score) { this->score_att = score; }		//점수 입력하기
-	void setScoreMid(double score) { this->score_mid = score; }
-	void setScoreFin(double score) { this->score_fin = score; }
-	void setScoreWork(double score) { this->score_work = score; }
-	void setScoreQuiz(double score) { this->score_quiz = quiz; }
+	void setScoreAtt(double score) { score_att = score; }		//점수 입력하기
+	void setScoreMid(double score) { score_mid = score; }
+	void setScoreFin(double score) { score_fin = score; }
+	void setScoreWork(double score) { score_work = score; }
+	void setScoreQuiz(double score) { score_quiz = score; }
 };
 
 void show_subject(int semester) {		//학기 공통과목 출력
@@ -259,7 +260,51 @@ vector<Sub> input_subject_score(vector<Sub> sub_vec, string name)		//취득 점수 �
 
 string get_subject_score(vector<Sub> sub_vec, string name)		//입력받은 취득 점수로 학점 계산
 {
+	vector<Sub>::iterator iter;
+	string sc;
+	int Expscore;
+	int myScore;
+	int Ap, Az, Bp, Bz, Cp, Cz;
+	int n1, n2;
 
+	for (iter = sub_vec.begin(); iter != sub_vec.end(); iter++)
+	{
+		if (iter->getClassName() == name)
+		{
+			Expscore = (iter->getAttExp() * iter->getAtt() / 100) + (iter->getMidExp() * iter->getMid() / 100) + (iter->getFinExp() * iter->getFin() / 100) + (iter->getWorkExp() * iter->getWork() / 100)
+				+ (iter->getQuizExp() * iter->getQuiz() / 100);
+			myScore = (iter->getScoreAtt() * iter->getAtt() / 100) + (iter->getScoreMid() * iter->getMid() / 100) + (iter->getScoreFin() * iter->getFin() / 100) + (iter->getScoreWork() * iter->getWork() / 100)
+				+ (iter->getScoreQuiz() * iter->getQuiz() / 100);
+
+		}
+	}
+
+	n1 = 100 - Expscore;
+	n2 = Expscore;
+
+	Ap = 100 - n1 * 15 / 50;
+	Az = Ap - n1 * 15 / 50;
+	Bp = Az - n1 * 20 / 50;
+	Bz = Bp - n2 * 20 / 50;
+	Cp = Bz - n2 * 10 / 50;
+	Cz = Cp - n2 * 10 / 50;
+
+	if (myScore >= Ap)
+		sc = "A+";
+	else if (myScore >= Az)
+		sc = "A0";
+	else if (myScore >= Bp)
+		sc = "B+";
+	else if (myScore >= Bz)
+		sc = "B0";
+	else if (myScore >= Cp)
+		sc = "C+";
+	else if (myScore >= Cz)
+		sc = "C0";
+	else
+		sc = "F";
+
+	return sc;
 }
 
 int main(void)
@@ -297,7 +342,7 @@ int main(void)
 			cin >> usrchoice;
 			for (iter = sub_vec.begin(); iter != sub_vec.end(); iter++) {			//sub_vec의 시작부터 끝까지 탐색
 				if (iter->getClassName() == usrchoice) {					//입력받은 과목명과 같은 경우
-					input_subject_score(sub_vec, usrchoice);				//취득점수 입력받기
+					sub_vec = input_subject_score(sub_vec, usrchoice);				//취득점수 입력받기
 					string score = get_subject_score(sub_vec, usrchoice);					//학점 구하기
 					cout << endl << "해당과목의 예상 학점은 " << score << "입니다" << endl;
 					a = 1;
