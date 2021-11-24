@@ -268,8 +268,8 @@ string get_subject_score(vector<Sub> sub_vec, string name)		//입력받은 취득 점수
 {
 	vector<Sub>::iterator iter;
 	string sc;
-	int Expscore;
-	int myScore;
+	int Expscore;		//기대평균치 점수
+	int myScore;		//취득 점수
 	int Ap, Az, Bp, Bz, Cp, Cz;
 	int n1, n2;
 
@@ -384,7 +384,7 @@ int main(void)
 			break;
 		}
 
-		cout << endl << "==================================" << endl;
+		cout << endl << "==================================" << endl << endl;
 		cout << "원하시는 기능을 선택해 주세요 : ";
 		cin >> usrc;
 	}
