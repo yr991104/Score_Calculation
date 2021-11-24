@@ -11,7 +11,7 @@ vector<string> first_semester = { "디지털논리","이산구조","고급프로그래밍","리눅
 vector<string> second_semester = { "객체지향프로그래밍","선형대수학","자료구조","시스템소프트웨어","자료구조실습","오픈소스소프트웨어개발" };		//2학기 공통과목
 vector<string> commons;			//이번 학기 공통과목 저장하는 문자열 벡터
 
-int limit = 4;			//최대이수학점 21학점
+int limit = 21;			//최대이수학점 21학점
 int current_grades = 0;	//현재 수강신청한 학점
 int semester;
 vector<string> select;		//선택한 과목 저장할 문자열 벡터
