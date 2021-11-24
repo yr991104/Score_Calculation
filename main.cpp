@@ -11,6 +11,8 @@ vector<string> first_semester = { "디지털논리","이산구조","고급프로그래밍","리눅
 vector<string> second_semester = { "객체지향프로그래밍","선형대수학","자료구조","시스템소프트웨어","자료구조실습","오픈소스소프트웨어개발" };		//2학기 공통과목
 vector<string> commons;			//이번 학기 공통과목 저장하는 문자열 벡터
 
+int limit = 4;			//최대이수학점 21학점
+int current_grades = 0;	//현재 수강신청한 학점
 int semester;
 vector<string> select;		//선택한 과목 저장할 문자열 벡터
 
@@ -18,6 +20,7 @@ class Sub {
 private:
 	string class_name;		//과목명
 	string professor;		//담당교수님
+	int point;				//학점(수업시수)
 	int students;			//학생수
 	int att;				//성적반영비율(출석, 중간고사, 기말고사, 과제, 퀴즈)
 	int mid;
@@ -89,9 +92,6 @@ void show_subject(int semester) {		//학기 공통과목 출력
 
 vector<string> subject_select(vector<string> select)		//과목 선택 함수
 {
-	int limit = 21;			//최대이수학점 21학점
-	int current_grades = 0;	//현재 수강신청한 학점
-
 	cout << "================================" << endl << endl;
 	cout << "2학년 몇 학기 입니까? (1/2) : ";
 	cin >> semester;
@@ -221,9 +221,15 @@ vector<Sub> add_subject(vector<string> select, vector<Sub> sub_vec)			//과목 추�
 	cin >> name;
 
 	s.ask_subject_info(name);		//입력받은 과목명의 과목 정보
-	sub_vec.push_back(s);			//sub_vec에 과목 정보 추가
 
-	cout << endl << "입력되었습니다." << endl;
+	if (current_grades <= limit)	//학점을 초과하지 않은 경우
+	{
+		sub_vec.push_back(s);			//sub_vec에 과목 정보 추가
+
+		cout << endl << "입력되었습니다." << endl;
+	}
+	else							//학점을 초과한 경우
+		cout << endl << "수강 가능 학점을 초과합니다." << endl;
 
 	return sub_vec;			//sub_vec를 리턴하여 과목 정보 리턴
 }
@@ -331,9 +337,10 @@ int main(void)
 	cin >> usrc;
 	string usrchoice;
 	
-	while (usrc != 3)
+	while (usrc != 4)
 	{
 		int a = 0;
+		int point = 0;
 
 		switch (usrc)
 		{
@@ -346,12 +353,29 @@ int main(void)
 					string score = get_subject_score(sub_vec, usrchoice);					//학점 구하기
 					cout << endl << "해당과목의 예상 학점은 " << score << "입니다" << endl;
 					a = 1;
+					break;
 				}
 			}
 			if(a != 1)			//과목명이 없는 경우
 				cout << "수강하지 않은 과목입니다." << endl;
 			break;
 		case 2:
+			if (current_grades == limit)		//이미 수강 가능 학점이 다 찬 경우
+			{
+				cout << "더 이상 과목을 수강할 수 없습니다." << endl;
+				break;
+			}
+
+			cout << "수강할 과목의 학점 : ";
+			cin >> point;
+			current_grades += point;
+			if (current_grades > limit)			//새롭게 수강할 과목이 초과학점이 될 경우
+			{
+				cout << "수강 가능 학점을 초과합니다." << endl;
+				current_grades -= point;
+				break;
+			}
+
 			sub_vec = add_subject(select, sub_vec);					//과목 추가
 			select.push_back(sub_vec.back().getClassName());		//select에도 과목명 추가
 			break;
